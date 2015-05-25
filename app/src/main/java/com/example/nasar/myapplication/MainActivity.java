@@ -1,6 +1,7 @@
 package com.example.nasar.myapplication;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -13,16 +14,18 @@ import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
-      private Toast toast;
-      private Context context;
-      private CharSequence text;
-      private final int duration = Toast.LENGTH_SHORT;
-      private ImageButton door1, door2,door3;
-      private Button play,stay,switched;
-      private int userPick;
+    private Toast toast;
+    private Context context;
+    private CharSequence text;
+    private final int duration = Toast.LENGTH_SHORT;
+    private ImageButton door1, door2, door3;
+    private Button play, stay, switched;
+    private int userPick;
+    Suspense suspense;
 
 
-      private MontyHallGame game;
+    private MontyHallGame game;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,13 +36,13 @@ public class MainActivity extends ActionBarActivity {
         toast = Toast.makeText(context, text, duration);
 
         game = new MontyHallGame();
-        door1 = (ImageButton)findViewById(R.id.door1);
-        door2 = (ImageButton)findViewById(R.id.door2);
-        door3 = (ImageButton)findViewById(R.id.door3);
-        play = (Button)findViewById(R.id.play);
-        switched = (Button)findViewById(R.id.switch_doors);
-        stay = (Button)findViewById(R.id.stay);
-
+        door1 = (ImageButton) findViewById(R.id.door1);
+        door2 = (ImageButton) findViewById(R.id.door2);
+        door3 = (ImageButton) findViewById(R.id.door3);
+        play = (Button) findViewById(R.id.play);
+        switched = (Button) findViewById(R.id.switch_doors);
+        stay = (Button) findViewById(R.id.stay);
+        suspense = new Suspense();
 
         door1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,14 +57,14 @@ public class MainActivity extends ActionBarActivity {
 
                 toast.show();
 
-                if(game.revealDummyDoor() == 2) {
+                if (game.revealDummyDoor() == 2) {
                     door2.forceLayout();
-                    door2.setBackgroundResource(R.drawable.goat);
-                }
-                else {
+                  //  door2.setBackgroundResource(R.drawable.goat);
+                    suspense.execute(door2,null,door2);
+                } else {
                     door3.forceLayout();
-                    door3.setBackgroundResource(R.drawable.goat);
-
+                //    door3.setBackgroundResource(R.drawable.goat);
+                    suspense.execute(door3,null,door3);
 
                 }
 
@@ -69,7 +72,6 @@ public class MainActivity extends ActionBarActivity {
             }
 
         });
-
 
 
         door2.setOnClickListener(new View.OnClickListener() {
@@ -86,15 +88,14 @@ public class MainActivity extends ActionBarActivity {
                 toast.show();
 
 
-                if(game.revealDummyDoor() == 1) {
+                if (game.revealDummyDoor() == 1) {
                     door1.forceLayout();
-                    door1.setBackgroundResource(R.drawable.goat);
-
-                }
-                else {
+                  //  door1.setBackgroundResource(R.drawable.goat);
+                    new Suspense().execute(door1,null,door1);
+                } else {
                     door3.forceLayout();
-                    door3.setBackgroundResource(R.drawable.goat);
-
+                  //  door3.setBackgroundResource(R.drawable.goat);
+                    suspense.execute(door3,null,door3);
 
                 }
             }
@@ -115,15 +116,14 @@ public class MainActivity extends ActionBarActivity {
                 toast.show();
 
 
-                if(game.revealDummyDoor() == 2) {
+                if (game.revealDummyDoor() == 2) {
                     door2.forceLayout();
-                    door2.setBackgroundResource(R.drawable.goat);
-
-                }
-                else {
+                  //  door2.setBackgroundResource(R.drawable.goat);
+                    new Suspense().execute(door2,null,door2);
+                } else {
                     door1.forceLayout();
                     door1.setBackgroundResource(R.drawable.goat);
-
+                    suspense.execute(door1, null, door1);
                 }
             }
         });
@@ -158,33 +158,30 @@ public class MainActivity extends ActionBarActivity {
         });
 
 
-
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(play.getText().equals("Play Again")) {
+                if (play.getText().equals("Play Again")) {
                     replay();
                     return;
                 }
-                if(game.userWon())
-                     text = "Nice Win, Play Again";
+                if (game.userWon())
+                    text = "Nice Win, Play Again";
                 else {
                     text = "Nice try, Play Again";
                     TextView text = (TextView) findViewById(R.id.selected_door);
                     text.setText("You should've picked door number: " + game.getPrizeDoor());
-                      }
+                }
                 toast = Toast.makeText(context, text, duration);
 
 
-                if(game.getPrizeDoor() == 2) {
+                if (game.getPrizeDoor() == 2) {
                     door2.forceLayout();
                     door2.setBackgroundResource(R.drawable.car);
-                }
-                else if(game.getPrizeDoor() == 3) {
+                } else if (game.getPrizeDoor() == 3) {
                     door3.forceLayout();
                     door3.setBackgroundResource(R.drawable.car);
-                }
-                else {
+                } else {
                     door1.forceLayout();
                     door1.setBackgroundResource(R.drawable.car);
                 }
@@ -196,16 +193,18 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
-   public void replay(){
-       door1.setEnabled(true);
-       door2.setEnabled(true);
-       door3.setEnabled(true);
 
-       door1.setBackgroundResource(R.drawable.cup);
-       door2.setBackgroundResource(R.drawable.cup);
-       door3.setBackgroundResource(R.drawable.cup);
-       play.setText("Play");
-   }
+    public void replay() {
+        door1.setEnabled(true);
+        door2.setEnabled(true);
+        door3.setEnabled(true);
+
+        door1.setBackgroundResource(R.drawable.cup);
+        door2.setBackgroundResource(R.drawable.cup);
+        door3.setBackgroundResource(R.drawable.cup);
+        play.setText("Play");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -226,5 +225,29 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class Suspense extends AsyncTask<ImageButton, Void, ImageButton> {
+
+        /*
+          delay the thread to create suspense
+         */
+
+        @Override
+        protected ImageButton doInBackground(ImageButton... params) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(ImageButton imageButton)
+        {
+            imageButton.setBackgroundResource(R.drawable.goat);
+        }
     }
 }
