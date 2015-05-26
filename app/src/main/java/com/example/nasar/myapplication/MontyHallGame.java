@@ -11,16 +11,26 @@ public class MontyHallGame implements MontyHall{
     private int dummyDoor;
     private Random rand;
     private final int numDoors = 3;
-    private int winSwitch = 0;
-    private int winStay =0;
+    private int switchWin,switchLosses;
+    private int stayWin, stayLosses;
+    private boolean switched,stayed;
 
 
     MontyHallGame(){
+
         userDoor = -1;
+        switchWin=0;
+        switchLosses =0;
+        stayLosses = 0;
+        stayWin = 0;
+        switched = false;
+        stayed = false;
         }
 
     @Override
     public void switchDoor() {
+        switched = true;
+        stayed = false;
         if(userDoor ==1 && dummyDoor == 2)
             userDoor = 3;
         else if (userDoor ==1 && dummyDoor == 3)
@@ -38,7 +48,8 @@ public class MontyHallGame implements MontyHall{
 
     @Override
     public void stay() {
-
+        stayed = true;
+        switched = false;
     }
 
     @Override
@@ -65,10 +76,40 @@ public class MontyHallGame implements MontyHall{
     }
 
     public boolean userWon(){
-        return userDoor == prizeDoor;
+         if(userDoor == prizeDoor){
+             if(switched){
+                 switchWin++;
+
+             }
+             else
+               stayWin++;
+            return true;
+         }
+
+        if(switched){
+          switchLosses++;
+        }
+        else
+            stayLosses++;
+        return false;
     }
 
-//    public ArrayList<Integer> stats(){
+    public int getSwitchWin() {
+        return switchWin;
+    }
+
+    public int getSwitchLosses() {
+        return switchLosses;
+    }
+
+    public int getStayWin() {
+        return stayWin;
+    }
+
+    public int getStayLosses() {
+        return stayLosses;
+    }
+    //    public ArrayList<Integer> stats(){
 //        // percent of wins when switched door
 //
 //        // percent of wins when stayed (not switched)

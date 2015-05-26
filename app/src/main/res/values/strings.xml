@@ -4,4 +4,13 @@
     <string name="selected_door">Selected Door!</string>
     <string name="action_settings">Settings</string>
     <string name="Welcome">Welcome To The Monty Hall Game</string>
+    <string name="play">Play</string>
+    <string name="stay">Stay</string>
+    <string name="play_again">Play Again</string>
+    <string name="switch_doors">Switch Doors</string>
+    <string name="game_Stats">Game Stats</string>
+    <string name="switched">Switched:  </string>
+    <string name="stayed">Stayed:  </string>
+    <string name="wins">Wins</string>
+    <string name="losses">Losses</string>
 </resources>

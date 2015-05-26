@@ -52,21 +52,16 @@ public class MainActivity extends ActionBarActivity {
                 door3.setEnabled(false);
                 door2.setEnabled(false);
                 door1.requestFocus();
+                door1.setEnabled(false);
                 TextView text = (TextView) findViewById(R.id.selected_door);
                 text.setText("You selected door 1");
 
                 toast.show();
 
-                if (game.revealDummyDoor() == 2) {
-                    door2.forceLayout();
-                  //  door2.setBackgroundResource(R.drawable.goat);
-                    suspense.execute(door2,null,door2);
-                } else {
-                    door3.forceLayout();
-                //    door3.setBackgroundResource(R.drawable.goat);
-                    suspense.execute(door3,null,door3);
-
-                }
+                if (game.revealDummyDoor() == 2)
+                    suspense.execute(door2, null, door2);
+                else
+                    suspense.execute(door3, null, door3);
 
 
             }
@@ -82,22 +77,18 @@ public class MainActivity extends ActionBarActivity {
                 door1.setEnabled(false);
                 door3.setEnabled(false);
                 door2.requestFocus();
+                door2.setEnabled(false);
                 TextView text = (TextView) findViewById(R.id.selected_door);
                 text.setText("You selected door 2");
 
                 toast.show();
 
 
-                if (game.revealDummyDoor() == 1) {
-                    door1.forceLayout();
-                  //  door1.setBackgroundResource(R.drawable.goat);
-                    new Suspense().execute(door1,null,door1);
-                } else {
-                    door3.forceLayout();
-                  //  door3.setBackgroundResource(R.drawable.goat);
-                    suspense.execute(door3,null,door3);
+                if (game.revealDummyDoor() == 1)
+                    suspense.execute(door1, null, door1);
+                else
+                    suspense.execute(door3, null, door3);
 
-                }
             }
         });
 
@@ -111,20 +102,19 @@ public class MainActivity extends ActionBarActivity {
                 door1.setEnabled(false);
                 door2.setEnabled(false);
                 door3.requestFocus();
+                door3.setEnabled(false);
                 TextView text = (TextView) findViewById(R.id.selected_door);
                 text.setText("You selected door 3");
                 toast.show();
 
 
-                if (game.revealDummyDoor() == 2) {
-                    door2.forceLayout();
-                  //  door2.setBackgroundResource(R.drawable.goat);
-                    new Suspense().execute(door2,null,door2);
-                } else {
-                    door1.forceLayout();
-                    door1.setBackgroundResource(R.drawable.goat);
+                if (game.revealDummyDoor() == 2)
+                    suspense.execute(door2, null, door2);
+
+                else
                     suspense.execute(door1, null, door1);
-                }
+
+
             }
         });
 
@@ -169,22 +159,23 @@ public class MainActivity extends ActionBarActivity {
                     text = "Nice Win, Play Again";
                 else {
                     text = "Nice try, Play Again";
-                    TextView text = (TextView) findViewById(R.id.selected_door);
-                    text.setText("You should've picked door number: " + game.getPrizeDoor());
+                 //   TextView text = (TextView) findViewById(R.id.selected_door);
+                 //   text.setText("You should've picked door number: " + game.getPrizeDoor());
                 }
                 toast = Toast.makeText(context, text, duration);
 
 
                 if (game.getPrizeDoor() == 2) {
-                    door2.forceLayout();
+
                     door2.setBackgroundResource(R.drawable.car);
                 } else if (game.getPrizeDoor() == 3) {
-                    door3.forceLayout();
+
                     door3.setBackgroundResource(R.drawable.car);
                 } else {
-                    door1.forceLayout();
+
                     door1.setBackgroundResource(R.drawable.car);
                 }
+              populateText();
                 toast.show();
                 play.setText("Play Again");
                 //replay();
@@ -193,7 +184,20 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
+    public void populateText(){
+        TextView switchedWins = (TextView) findViewById(R.id.switched_wins);
+        TextView switchedLosses = (TextView) findViewById(R.id.switch_losses);
+        TextView stayedWins = (TextView) findViewById(R.id.stayed_wins);
+        TextView stayedLosses = (TextView) findViewById(R.id.stayed_losses);
+//
+        switchedWins.setText(Integer.toString(game.getSwitchWin()));
+        stayedWins.setText(Integer.toString(game.getStayWin()));
 
+        switchedLosses.setText(Integer.toString(game.getSwitchLosses()));
+        stayedLosses.setText(Integer.toString(game.getStayLosses()));
+//
+//
+    }
     public void replay() {
         door1.setEnabled(true);
         door2.setEnabled(true);
@@ -203,6 +207,7 @@ public class MainActivity extends ActionBarActivity {
         door2.setBackgroundResource(R.drawable.cup);
         door3.setBackgroundResource(R.drawable.cup);
         play.setText("Play");
+        suspense = new Suspense();
     }
 
     @Override
@@ -236,7 +241,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected ImageButton doInBackground(ImageButton... params) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -245,8 +250,7 @@ public class MainActivity extends ActionBarActivity {
         }
 
         @Override
-        protected void onPostExecute(ImageButton imageButton)
-        {
+        protected void onPostExecute(ImageButton imageButton) {
             imageButton.setBackgroundResource(R.drawable.goat);
         }
     }

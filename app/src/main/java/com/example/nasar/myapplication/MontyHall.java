@@ -9,4 +9,6 @@ public interface MontyHall {
     public void setUserDoor(int door);
     public int getUserDoor();
     public int getPrizeDoor();
+
+
 }
