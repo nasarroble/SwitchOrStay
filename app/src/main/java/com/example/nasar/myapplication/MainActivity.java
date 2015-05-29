@@ -7,8 +7,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ public class MainActivity extends ActionBarActivity {
     private Button play, stay, switched;
     private int userPick;
     Suspense suspense;
+
 
 
     private MontyHallGame game;
@@ -47,6 +50,7 @@ public class MainActivity extends ActionBarActivity {
         door1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                door1.requestFocus();
                 userPick = 1;
                 game.setUserDoor(userPick);
                 door3.setEnabled(false);
@@ -54,8 +58,9 @@ public class MainActivity extends ActionBarActivity {
                 door1.requestFocus();
                 door1.setEnabled(false);
                 TextView text = (TextView) findViewById(R.id.selected_door);
-                text.setText("You selected door 1");
+                rotateDoor(door1);
 
+                text.setText("You selected door 1");
                 toast.show();
 
                 if (game.revealDummyDoor() == 2)
@@ -72,6 +77,7 @@ public class MainActivity extends ActionBarActivity {
         door2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                door2.requestFocus();
                 userPick = 2;
                 game.setUserDoor(userPick);
                 door1.setEnabled(false);
@@ -80,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
                 door2.setEnabled(false);
                 TextView text = (TextView) findViewById(R.id.selected_door);
                 text.setText("You selected door 2");
-
+                rotateDoor(door2);
                 toast.show();
 
 
@@ -96,7 +102,7 @@ public class MainActivity extends ActionBarActivity {
         door3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                door3.requestFocus();
                 userPick = 3;
                 game.setUserDoor(userPick);
                 door1.setEnabled(false);
@@ -106,7 +112,7 @@ public class MainActivity extends ActionBarActivity {
                 TextView text = (TextView) findViewById(R.id.selected_door);
                 text.setText("You selected door 3");
                 toast.show();
-
+                rotateDoor(door3);
 
                 if (game.revealDummyDoor() == 2)
                     suspense.execute(door2, null, door2);
@@ -251,7 +257,29 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(ImageButton imageButton) {
+
             imageButton.setBackgroundResource(R.drawable.goat);
+
         }
     }
+
+    public void rotateDoor(final ImageView door){
+
+      runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+              TextView textView = (TextView) findViewById(R.id.welcome);
+              textView.setText("Background Thread animation");
+              RotateAnimation rotateAnimation = new RotateAnimation(0,360);//RotateAnimation(0,360);
+              rotateAnimation.setFillAfter(true);
+              rotateAnimation.setStartOffset(300);
+              rotateAnimation.setDuration(500);
+
+                door.setRotationX(360);
+              door.startAnimation(rotateAnimation);
+          }
+      });
+
+    }
+
 }
